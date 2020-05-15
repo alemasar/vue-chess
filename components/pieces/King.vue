@@ -1,5 +1,5 @@
 <template>
-  <div class="pawn" :class="color"></div>
+  <div class="king" :class="color"></div>
 </template>
 <script>
 export default {
@@ -12,7 +12,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.pawn {
+.king {
   position: absolute;
   height: 60px;
   width: 60px;
@@ -20,10 +20,10 @@ export default {
   background-size: contain;
   position: absolute;
   &.blanc {
-    background-image: url('~assets/images/peo-blanc.svg');
+    background-image: url('~assets/images/rei-blanc.svg');
   }
   &.negre {
-    background-image: url('~assets/images/peo-negra.svg');
+    background-image: url('~assets/images/rei-negra.svg');
   }
 }
 </style>
