@@ -5,10 +5,13 @@
         <Box
           v-for="column in fila"
           :key="'column-' + column.left + '-' + column.top"
-          :top="column.top"
           :left="column.left"
+          :top="column.top"
+          :x="column.x"
+          :y="column.y"
           :type="column.piece.type"
           :direction="column.piece.direction"
+          :css-class="column.cssClass"
         >
         </Box>
       </template>
@@ -17,7 +20,7 @@
 </template>
 <script>
 import Box from './Box'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -29,11 +32,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('chessboard', ['getColumn'])
+    ...mapGetters('chessboard', ['getColumn']),
+    ...mapGetters(['getXIni', 'getYIni', 'getStatus']),
+    status() {
+      return this.getStatus()
+    }
+  },
+  watch: {
+    status(newStatus) {
+      // Our fancy notification (2).
+      console.log(newStatus)
+      if (newStatus === 1) {
+        const x = this.getXIni()
+        const y = this.getYIni()
+        this.setCssClass({ x, y, cssClass: 'selected' })
+      }
+    }
   },
   created() {
     console.log(this.getColumn())
     this.items = this.getColumn()
+  },
+  methods: {
+    ...mapActions('chessboard', ['setCssClass'])
   }
 }
 </script>

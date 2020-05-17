@@ -1,6 +1,7 @@
 <template>
   <div
     class="box"
+    :class="cssClass"
     :style="{ left: left + 'px', top: top + 'px' }"
     @click="clickBox"
   >
@@ -8,6 +9,8 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   props: {
     left: {
@@ -18,13 +21,25 @@ export default {
       type: Number,
       default: 0
     },
+    x: {
+      type: Number,
+      default: 0
+    },
+    y: {
+      type: Number,
+      default: 0
+    },
     type: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     direction: {
       type: Number,
       default: 0
+    },
+    cssClass: {
+      type: String,
+      default: 'noSelected'
     }
   },
   data() {
@@ -32,6 +47,9 @@ export default {
       component: null,
       color: 'blanc'
     }
+  },
+  computed: {
+    ...mapGetters(['getStatus'])
   },
   async mounted() {
     const piece = this.getType()
@@ -46,35 +64,51 @@ export default {
     }
   },
   methods: {
-    clickBox: function (event) {
-      console.log('Clicked', event)
+    /*getCssClass() {
+      const status = this.getStatus()
+      console.log(status)
+      if (status === 1) {
+        this.cssClass = 'selected'
+      }
+      return this.cssClass
+    },*/
+    ...mapActions(['setStatus', 'setXIni', 'setYIni']),
+    clickBox: function () {
+      if (this.type !== 0) {
+        const status = this.getStatus()
+        console.log(status)
+        if (status === 0) {
+          this.setStatus(1)
+          this.setXIni(this.x)
+          this.setYIni(this.y)
+        }
+      }
     },
     getType: function () {
-      let piece = '0'
+      let piece = ''
       if (!this.type) {
         return null
       } else {
         switch (this.type) {
-          case '2':
+          case 2:
             piece = 'Tower'
             break
-          case '3':
+          case 3:
             piece = 'Horse'
             break
-          case '4':
+          case 4:
             piece = 'Bishop'
             break
-          case '5':
+          case 5:
             piece = 'King'
             break
-          case '6':
+          case 6:
             piece = 'Queen'
             break
           default:
             piece = 'Pawn'
         }
       }
-      console.log(this.type)
       return piece
     }
   }
@@ -85,5 +119,9 @@ export default {
   position: absolute;
   height: 60px;
   width: 60px;
+  &.selected {
+    background-color: red;
+    opacity: 0.5;
+  }
 }
 </style>

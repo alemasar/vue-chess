@@ -8,6 +8,8 @@ import king from './king'
 import chessboard from './generate-chessboard'
 
 // const generate = new GenerateChessboard()
+export const SETCSSCLASS = 'setCssClass'
+export const SETPOSITIONS = 'setPositions'
 
 export const state = () => ({
   chessboard: [],
@@ -27,14 +29,29 @@ export const getters = {
   }
 }
 
+export const actions = {
+  [SETCSSCLASS]({ commit }, payload) {
+    console.log(payload.x)
+    commit('setCssClass', payload)
+  },
+  [SETPOSITIONS]({ commit }) {
+    commit('setPositions')
+  }
+}
+
 export const mutations = {
-  setPositions(state) {
+  [SETCSSCLASS](state, { x, y, cssClass }) {
+    console.log(x)
+    state.chessboard[x][y].cssClass = cssClass
+  },
+  [SETPOSITIONS](state) {
     //console.log('PASO PER SETPOSITIONS', chessboard)
     const initialTop = 480
     const initialLeft = 60
     const widthPiece = 60
     const heightPiece = 60
     let direction = -1
+    const cssClass = 'notSelected'
     // console.log(chessboard.state().initialChessboard)
     chessboard.state().initialChessboard.forEach((x, ix) => {
       state.chessboard[ix] = []
@@ -50,7 +67,9 @@ export const mutations = {
           .map((piece) => {
             if (parseInt(Object.keys(piece)[0]) === y.piece) {
               piece[Object.keys(piece)[0]].direction = direction
-              piece[Object.keys(piece)[0]].type = Object.keys(piece)[0]
+              piece[Object.keys(piece)[0]].type = parseInt(
+                Object.keys(piece)[0]
+              )
               return piece[Object.keys(piece)[0]]
             }
           })
@@ -59,7 +78,10 @@ export const mutations = {
         state.chessboard[ix][iy] = {
           piece: { ...piece[0] },
           top,
-          left
+          left,
+          x: ix,
+          y: iy,
+          cssClass
         }
       })
     })
