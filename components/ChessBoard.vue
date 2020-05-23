@@ -50,7 +50,7 @@ export default {
     }
   },
   created() {
-    console.log(this.getColumn())
+    //console.log(this.$store)
     this.items = this.getColumn()
   },
   methods: {

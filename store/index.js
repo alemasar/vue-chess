@@ -21,9 +21,10 @@ export const getters = {
 }
 
 export const actions = {
-  nuxtServerInit({ commit }) {
+  nuxtServerInit({ dispatch /*, dispatch*/ }) {
     console.log(' PASO AL INICI')
-    commit('chessboard/setPositions')
+    dispatch('chessboard/setPieces')
+    dispatch('chessboard/setPositions')
   },
   [SETSTATUS]({ commit }, status) {
     console.log(status)
