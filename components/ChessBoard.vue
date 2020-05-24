@@ -9,7 +9,7 @@
           :top="column.top"
           :x="column.x"
           :y="column.y"
-          :type="column.piece.type"
+          :type="column.piece.id"
           :direction="column.piece.direction"
           :css-class="column.cssClass"
         >
@@ -32,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('chessboard', ['getColumn']),
+    ...mapGetters('chessboard', ['getChessboard']),
     ...mapGetters(['getXIni', 'getYIni', 'getStatus']),
     status() {
       return this.getStatus()
@@ -50,8 +50,8 @@ export default {
     }
   },
   created() {
-    //console.log(this.$store)
-    this.items = this.getColumn()
+    this.items = [...this.getChessboard()]
+    console.log(this.items)
   },
   methods: {
     ...mapActions('chessboard', ['setCssClass'])

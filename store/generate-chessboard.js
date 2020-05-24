@@ -1,89 +1,129 @@
-export default {
-  state: () => ({
-    initialChessboard: [
-      [
-        { piece: 2 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 2 }
-      ],
-      [
-        { piece: 3 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 3 }
-      ],
-      [
-        { piece: 4 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 4 }
-      ],
-      [
-        { piece: 6 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 6 }
-      ],
-      [
-        { piece: 5 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 5 }
-      ],
-      [
-        { piece: 4 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 4 }
-      ],
-      [
-        { piece: 3 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 3 }
-      ],
-      [
-        { piece: 2 },
-        { piece: 1 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 0 },
-        { piece: 1 },
-        { piece: 2 }
-      ]
+export const state = () => ({
+  initialChessboard: [
+    [
+      { piece: 2 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 2 }
+    ],
+    [
+      { piece: 3 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 3 }
+    ],
+    [
+      { piece: 4 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 4 }
+    ],
+    [
+      { piece: 6 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 6 }
+    ],
+    [
+      { piece: 5 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 5 }
+    ],
+    [
+      { piece: 4 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 4 }
+    ],
+    [
+      { piece: 3 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 3 }
+    ],
+    [
+      { piece: 2 },
+      { piece: 1 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 0 },
+      { piece: 1 },
+      { piece: 2 }
     ]
-  })
+  ],
+  types: [
+    {
+      id: 1,
+      type: 'pawn',
+      module: 'pawn'
+    },
+    {
+      id: 2,
+      type: 'tower',
+      module: 'piece'
+    },
+    {
+      id: 3,
+      type: 'horse',
+      module: 'horse'
+    },
+    {
+      id: 4,
+      type: 'bishop',
+      module: 'piece'
+    },
+    {
+      id: 5,
+      type: 'king',
+      module: 'king'
+    },
+    {
+      id: 6,
+      type: 'queen',
+      module: 'piece'
+    }
+  ]
+})
+
+export const getters = {
+  getChessboard: (state) => () => {
+    return state.initialChessboard
+  },
+  getTypePieces: (state) => () => {
+    return state.types
+  }
 }
+
 /*getPieceLogic(piece, x, y, direction) {
     let pieceLogic = {}
     switch (piece) {
