@@ -29,12 +29,10 @@ export const getters = {
 
 export const actions = {
   [SETCSSCLASS]({ commit }, payload) {
-    console.log(payload.x)
     commit(SETCSSCLASS, payload)
   },
   [SETPIECES]({ commit, rootState, rootGetters }) {
     const types = [...rootGetters['generate-chessboard/getTypePieces']()]
-    console.log(types)
     const pieces = []
     types.forEach((type) => {
       commit('piece/setId', type.id, { root: true })
@@ -43,13 +41,9 @@ export const actions = {
       commit('piece/setModule', type.module, { root: true })
       pieces.push({ ...rootState.piece })
     })
-    console.log(pieces)
     commit(SETPIECES, pieces)
   },
   [SETPOSITIONS]({ commit, getters, rootGetters }) {
-    console.log('PASO PER SETPOSITIONS', [
-      ...rootGetters['generate-chessboard/getChessboard']()
-    ])
     const chessboard = [...rootGetters['generate-chessboard/getChessboard']()]
     const initialTop = 480
     const initialLeft = 60
@@ -69,24 +63,10 @@ export const actions = {
         } else {
           direction = -1
         }
-        console.log(direction)
         const piece = pieces.filter((p) => p.id === y.piece)
         if (piece.length > 0) {
           piece[0].direction = direction
         }
-        console.log(piece)
-        /* const piece = state.pieces
-          .map((piece) => {
-            if (parseInt(Object.keys(piece)[0]) === y.piece) {
-              piece[Object.keys(piece)[0]].direction = direction
-              piece[Object.keys(piece)[0]].type = parseInt(
-                Object.keys(piece)[0]
-              )
-              return piece[Object.keys(piece)[0]]
-            }
-          })
-          .filter((p) => p)
-        console.log(piece)*/
         finalChessboard[ix][iy] = {
           piece: { ...piece[0] },
           top,
@@ -99,8 +79,13 @@ export const actions = {
     })
     commit(SETPOSITIONS, [...finalChessboard])
   },
-  [SETPOSIBLEMOVES]({ commit }) {
-    commit(SETPOSIBLEMOVES)
+  [SETPOSIBLEMOVES]({ /*commit,*/ rootGetters, getters }) {
+    const x = rootGetters.getXIni()
+    const y = rootGetters.getYIni()
+    const chessboard = [...getters.getChessboard()]
+    console.log(chessboard[x][y])
+    console.log(this)
+    //commit(SETPOSIBLEMOVES)
   }
 }
 
@@ -109,8 +94,9 @@ export const mutations = {
     console.log(x)
     state.chessboard[x][y].cssClass = cssClass
   },
-  [SETPOSIBLEMOVES]({ commit }) {
-    commit('setPosiblesMoves')
+  [SETPOSIBLEMOVES](state, posibleMoves) {
+    //commit('setPosiblesMoves')
+    state.posibleMoves = [...posibleMoves]
   },
   [SETPIECES](state, pieces) {
     state.pieces = pieces

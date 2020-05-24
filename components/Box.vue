@@ -64,14 +64,6 @@ export default {
     }
   },
   methods: {
-    /*getCssClass() {
-      const status = this.getStatus()
-      console.log(status)
-      if (status === 1) {
-        this.cssClass = 'selected'
-      }
-      return this.cssClass
-    },*/
     ...mapActions(['setStatus', 'setXIni', 'setYIni']),
     clickBox: function () {
       if (this.type !== 0) {

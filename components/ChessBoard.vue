@@ -40,12 +40,12 @@ export default {
   },
   watch: {
     status(newStatus) {
-      // Our fancy notification (2).
       console.log(newStatus)
       if (newStatus === 1) {
         const x = this.getXIni()
         const y = this.getYIni()
         this.setCssClass({ x, y, cssClass: 'selected' })
+        this.setPosibleMoves()
       }
     }
   },
@@ -54,7 +54,7 @@ export default {
     console.log(this.items)
   },
   methods: {
-    ...mapActions('chessboard', ['setCssClass'])
+    ...mapActions('chessboard', ['setCssClass', 'setPosibleMoves'])
   }
 }
 </script>

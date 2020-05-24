@@ -1,6 +1,10 @@
+import { pluginsImpl } from './plugins'
+
 export const SETSTATUS = 'setStatus'
 export const SETXINI = 'setXIni'
 export const SETYINI = 'setYIni'
+
+export const plugins = [pluginsImpl]
 
 export const state = () => ({
   status: 0,
