@@ -3,13 +3,16 @@ import { pluginsImpl } from './plugins'
 export const SETSTATUS = 'setStatus'
 export const SETXINI = 'setXIni'
 export const SETYINI = 'setYIni'
-
+export const SETXFI = 'setXFi'
+export const SETYFI = 'setYFi'
 export const plugins = [pluginsImpl]
 
 export const state = () => ({
   status: 0,
   xini: 0,
-  yini: 0
+  yini: 0,
+  xfi: 0,
+  yfi: 0
 })
 
 export const getters = {
@@ -21,6 +24,12 @@ export const getters = {
   },
   getYIni: (state) => () => {
     return state.yini
+  },
+  getXFi: (state) => () => {
+    return state.xfi
+  },
+  getYFi: (state) => () => {
+    return state.yfi
   }
 }
 
@@ -41,6 +50,14 @@ export const actions = {
   [SETYINI]({ commit }, y) {
     console.log(y)
     commit(SETYINI, y)
+  },
+  [SETXFI]({ commit }, x) {
+    console.log(x)
+    commit(SETXFI, x)
+  },
+  [SETYFI]({ commit }, y) {
+    console.log(y)
+    commit(SETYFI, y)
   }
 }
 
@@ -53,5 +70,11 @@ export const mutations = {
   },
   [SETYINI](state, yini) {
     state.yini = yini
+  },
+  [SETXFI](state, xini) {
+    state.xfi = xini
+  },
+  [SETYFI](state, yini) {
+    state.yfi = yini
   }
 }

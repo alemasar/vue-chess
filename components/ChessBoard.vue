@@ -33,9 +33,12 @@ export default {
   },
   computed: {
     ...mapGetters('chessboard', ['getChessboard']),
-    ...mapGetters(['getXIni', 'getYIni', 'getStatus']),
+    ...mapGetters(['getXIni', 'getYIni', 'getXFi', 'getYFi', 'getStatus']),
     status() {
       return this.getStatus()
+    },
+    chessboardItems() {
+      return this.getChessboard()
     }
   },
   watch: {
@@ -45,7 +48,9 @@ export default {
         const x = this.getXIni()
         const y = this.getYIni()
         this.setCssClass({ x, y, cssClass: 'selected' })
-        this.setPosibleMoves()
+        this.setPosiblesMoves()
+      } else if (newStatus === 2) {
+        this.setMove({})
       }
     }
   },
@@ -54,7 +59,7 @@ export default {
     console.log(this.items)
   },
   methods: {
-    ...mapActions('chessboard', ['setCssClass', 'setPosibleMoves'])
+    ...mapActions('chessboard', ['setCssClass', 'setPosiblesMoves', 'setMove'])
   }
 }
 </script>

@@ -51,29 +51,48 @@ export default {
   computed: {
     ...mapGetters(['getStatus'])
   },
-  async mounted() {
-    const piece = this.getType()
-    if (piece !== null) {
-      const c = await import(`./pieces/${piece}`)
-      const comp = c.default
-      this.$options.components[piece] = comp
-      this.component = piece
-      if (this.direction === -1) {
-        this.color = 'negre'
-      }
+  watch: {
+    type(newType) {
+      console.log('WATCH TYPE: ', newType)
+      this.setPiece()
     }
   },
+  mounted() {
+    this.setPiece()
+  },
   methods: {
-    ...mapActions(['setStatus', 'setXIni', 'setYIni']),
+    ...mapActions(['setStatus', 'setXIni', 'setYIni', 'setXFi', 'setYFi']),
     clickBox: function () {
+      const status = this.getStatus()
       if (this.type !== 0) {
-        const status = this.getStatus()
+        console.log('status: ', status)
         console.log(status)
         if (status === 0) {
           this.setStatus(1)
           this.setXIni(this.x)
           this.setYIni(this.y)
         }
+      } else {
+        if (status === 1) {
+          this.setStatus(2)
+          console.log('x:' + this.x + ' y: ' + this.y)
+          this.setXFi(this.x)
+          this.setYFi(this.y)
+        }
+      }
+    },
+    async setPiece() {
+      const piece = this.getType()
+      if (piece !== null) {
+        const c = await import(`./pieces/${piece}`)
+        const comp = c.default
+        this.$options.components[piece] = comp
+        this.component = piece
+        if (this.direction === -1) {
+          this.color = 'negre'
+        }
+      } else {
+        this.component = null
       }
     },
     getType: function () {
@@ -113,6 +132,10 @@ export default {
   width: 60px;
   &.selected {
     background-color: red;
+    opacity: 0.5;
+  }
+  &.posibleMove {
+    background-color: green;
     opacity: 0.5;
   }
 }
