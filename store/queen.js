@@ -13,6 +13,11 @@ export const state = () => ({
     [-1, 0]
   ]
 })
+export const getters = {
+  getMoves: (state) => () => {
+    return state.moves
+  }
+}
 
 export const actions = {
   [SETDIRECTION]({ commit }, direction) {

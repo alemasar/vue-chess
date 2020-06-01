@@ -8,3 +8,9 @@ export default {
     ]
   })
 }
+
+export const getters = {
+  getMoves: (state) => () => {
+    return state.moves
+  }
+}

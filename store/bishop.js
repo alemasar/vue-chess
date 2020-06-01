@@ -6,3 +6,8 @@ export const state = () => ({
     [-1, -1]
   ]
 })
+export const getters = {
+  getMoves: (state) => () => {
+    return state.moves
+  }
+}

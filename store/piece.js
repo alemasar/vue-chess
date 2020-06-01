@@ -2,24 +2,38 @@ export const SETID = 'setId'
 export const SETDIRECTION = 'setDirection'
 export const SETTYPE = 'setType'
 export const SETMODULE = 'setModule'
+export const SETMOVED = 'setMoved'
 export const SETPOSIBLESMOVES = 'setPosiblesMoves'
 
 export const state = () => ({
   id: 0,
   direction: 0,
   type: '',
-  module: ''
+  module: '',
+  moved: false
 })
 
 export const getters = {
   getDirection: (state) => () => {
     return state.direction
+  },
+  getModule: (state) => () => {
+    return state.module
+  },
+  getType: (state) => () => {
+    return state.type
+  },
+  getMoved: (state) => () => {
+    return state.moved
   }
 }
 
 export const actions = {
   [SETDIRECTION]({ commit }, direction) {
     commit(SETDIRECTION, direction)
+  },
+  [SETMOVED]({ commit }, moved) {
+    commit(SETMOVED, moved)
   },
   [SETTYPE]({ commit }, type) {
     commit(SETTYPE, type)
@@ -33,22 +47,24 @@ export const actions = {
   [SETPOSIBLESMOVES]({ commit, rootGetters, getters }, chessboardProps) {
     const posiblesMoves = []
     const direction = rootGetters['piece/getDirection']()
-    const moves = getters.getMoves()
+    const type = getters.getType()
+    console.log(type)
+    const moves = [...rootGetters[type + '/getMoves']()]
     const chessboard = [...rootGetters['chessboard/getChessboard']()]
-    console.log('PAWN POSIBLEMOVES: ', moves)
-    console.log('PAWN POSIBLEMOVES: ', direction)
-    console.log('PAWN POSIBLEMOVES: ', chessboard)
+    console.log('PIECE POSIBLEMOVES: ', moves)
+    console.log('PIECE POSIBLEMOVES: ', direction)
+    console.log('PIECE POSIBLEMOVES: ', chessboard)
 
     moves.forEach((m) => {
-      let xto = parseInt(chessboardProps.x) + m[0] * direction
-      let yto = parseInt(chessboardProps.y) + m[1] * direction
+      let xto = chessboardProps.x + m[0] * direction
+      let yto = chessboardProps.y + m[1] * direction
       while (
         this.notOutOfBounds(xto, yto) &&
         chessboard[xto][yto].piece.id === 0
       ) {
         posiblesMoves.push([xto, yto])
-        xto = parseInt(xto) + m[0] * direction
-        yto = parseInt(yto) + m[1] * direction
+        xto = xto + m[0] * direction
+        yto = yto + m[1] * direction
       }
       if (
         this.notOutOfBounds(xto, yto) &&
@@ -76,5 +92,8 @@ export const mutations = {
   },
   [SETID](state, id) {
     state.id = id
+  },
+  [SETMOVED](state, moved) {
+    state.moved = moved
   }
 }

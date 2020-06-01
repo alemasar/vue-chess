@@ -11,6 +11,7 @@ export const SETCSSCLASS = 'setCssClass'
 export const SETPOSITIONS = 'setPositions'
 export const SETPIECES = 'setPieces'
 export const SETPOSIBLESMOVES = 'setPosiblesMoves'
+export const SETPIECEMOVED = 'setPieceMove'
 export const SETMOVE = 'setMove'
 
 export const state = () => ({
@@ -36,6 +37,9 @@ export const actions = {
   [SETCSSCLASS]({ commit }, payload) {
     commit(SETCSSCLASS, payload)
   },
+  [SETPIECEMOVED]({ commit }, payload) {
+    commit(SETPIECEMOVED, payload)
+  },
   [SETPIECES]({ commit, rootState, rootGetters }) {
     const types = [...rootGetters['generate-chessboard/getTypePieces']()]
     const pieces = []
@@ -57,6 +61,7 @@ export const actions = {
     let finalChessboard = []
     let direction = -1
     const cssClass = 'notSelected'
+    console.log('PAWN StATE', rootGetters['pawn/getState']())
     chessboard.forEach((x, ix) => {
       finalChessboard[ix] = []
       const left = initialLeft + ix * widthPiece
@@ -137,9 +142,9 @@ export const actions = {
       })
       dispatch(SETCSSCLASS, { x: xini, y: yini, cssClass: 'notSelected' })
       if (chessboard[xfi][yfi].piece.id === 1) {
-        dispatch('pawn/setMoved', true, {
-          root: true
-        })
+        console.log('CHESSBOARD PAWN: ', chessboard[xfi][yfi].piece)
+        //        chessboard[xfi][yfi].piece.moved = true
+        commit(SETPIECEMOVED, { x: xfi, y: yfi, moved: true })
       }
       commit('setStatus', 0, { root: true })
     } else {
@@ -150,8 +155,10 @@ export const actions = {
 
 export const mutations = {
   [SETCSSCLASS](state, { x, y, cssClass }) {
-    console.log(x)
     state.chessboard[x][y].cssClass = cssClass
+  },
+  [SETPIECEMOVED](state, { x, y, moved }) {
+    state.chessboard[x][y].piece.moved = moved
   },
   [SETPOSIBLESMOVES](state, posiblesMoves) {
     state.posiblesMoves = [...posiblesMoves]
