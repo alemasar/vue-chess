@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     ...mapGetters('chessboard', ['getChessboard']),
-    ...mapGetters(['getXIni', 'getYIni', 'getXFi', 'getYFi', 'getStatus']),
+    ...mapGetters(['getXIni', 'getYIni', 'getStatus', 'getPlayer']),
     status() {
       return this.getStatus()
     },

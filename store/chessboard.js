@@ -1,12 +1,3 @@
-// import GenerateChessboard from './helpers/generate-chessboard'
-//import pawn from './pawn'
-/*import tower from './tower'
-import horse from './horse'
-import bishop from './bishop'
-import queen from './queen'
-import king from './king'*/
-
-// const generate = new GenerateChessboard()
 export const SETCSSCLASS = 'setCssClass'
 export const SETPOSITIONS = 'setPositions'
 export const SETPIECES = 'setPieces'

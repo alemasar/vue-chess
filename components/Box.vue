@@ -49,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getStatus'])
+    ...mapGetters(['getStatus', 'getPlayer'])
   },
   watch: {
     type(newType) {
@@ -64,10 +64,10 @@ export default {
     ...mapActions(['setStatus', 'setXIni', 'setYIni', 'setXFi', 'setYFi']),
     clickBox: function () {
       const status = this.getStatus()
+      const player = this.getPlayer()
       if (this.type !== 0) {
-        console.log('status: ', status)
-        console.log(status)
-        if (status === 0) {
+        console.log('player: ', player)
+        if (status === 0 && player === this.direction) {
           this.setStatus(1)
           this.setXIni(this.x)
           this.setYIni(this.y)

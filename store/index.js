@@ -5,6 +5,7 @@ export const SETXINI = 'setXIni'
 export const SETYINI = 'setYIni'
 export const SETXFI = 'setXFi'
 export const SETYFI = 'setYFi'
+export const SETPLAYER = 'setPlayer'
 export const plugins = [pluginsImpl]
 
 export const state = () => ({
@@ -12,7 +13,8 @@ export const state = () => ({
   xini: 0,
   yini: 0,
   xfi: 0,
-  yfi: 0
+  yfi: 0,
+  player: -1
 })
 
 export const getters = {
@@ -30,6 +32,10 @@ export const getters = {
   },
   getYFi: (state) => () => {
     return state.yfi
+  },
+  getPlayer: (state) => () => {
+    console.log(state.player)
+    return state.player
   }
 }
 
@@ -44,20 +50,20 @@ export const actions = {
     commit(SETSTATUS, status)
   },
   [SETXINI]({ commit }, x) {
-    console.log(x)
     commit(SETXINI, x)
   },
   [SETYINI]({ commit }, y) {
-    console.log(y)
     commit(SETYINI, y)
   },
   [SETXFI]({ commit }, x) {
-    console.log(x)
     commit(SETXFI, x)
   },
   [SETYFI]({ commit }, y) {
-    console.log(y)
     commit(SETYFI, y)
+  },
+  [SETPLAYER]({ commit }, player) {
+    console.log(player)
+    commit(SETPLAYER, player)
   }
 }
 
@@ -76,5 +82,8 @@ export const mutations = {
   },
   [SETYFI](state, yini) {
     state.yfi = yini
+  },
+  [SETPLAYER](state, player) {
+    state.player = player
   }
 }
