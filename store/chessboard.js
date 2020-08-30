@@ -115,6 +115,7 @@ export const actions = {
     const yfi = rootGetters.getYFi()
     const movements = getters.getPosiblesMoves()
     const chessboard = [...getters.getChessboard()]
+    const player = rootGetters.getPlayer()
     let move = false
     movements.forEach((mov) => {
       if (mov[0] === xfi && mov[1] === yfi) {
@@ -138,6 +139,7 @@ export const actions = {
         commit(SETPIECEMOVED, { x: xfi, y: yfi, moved: true })
       }
       commit('setStatus', 0, { root: true })
+      commit('setPlayer', player * -1, { root: true })
     } else {
       commit('setStatus', 1, { root: true })
     }
