@@ -40,7 +40,7 @@ export const getters = {
 }
 
 export const actions = {
-  nuxtServerInit({ dispatch /*, dispatch*/ }) {
+  nuxtServerInit({ dispatch }) {
     console.log(' PASO AL INICI')
     dispatch('chessboard/setPieces')
     dispatch('chessboard/setPositions')

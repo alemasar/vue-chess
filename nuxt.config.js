@@ -1,6 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  target: 'static',
   mode: 'universal',
   /*
    ** Headers of the page
@@ -42,7 +43,31 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: [
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: process.env.NUXT_ENV_APIKEY,
+          authDomain: process.env.NUXT_ENV_AUTHDOMAIN,
+          databaseURL: process.env.NUXT_ENV_DATABASEURL,
+          projectId: process.env.NUXT_ENV_PROJECTID,
+          storageBucket: process.env.NUXT_ENV_STORAGEBUCKET,
+          messagingSenderId: process.env.NUXT_ENV_MESSAGINGSENDERID,
+          appId: process.env.NUXT_ENV_APPID,
+          measurementId: process.env.NUXT_ENV_MEASUREMENTID
+        },
+        services: {
+          auth: false, // Just as example. Can be any other service.
+          messaging: true,
+          firestore: true
+        },
+        firestore: {
+          memoryOnly: false // default
+        }
+      }
+    ]
+  ],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

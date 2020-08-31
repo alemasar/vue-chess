@@ -1,7 +1,7 @@
 <template>
   <div class="chessboard-container">
     <div class="chessboard">
-      <template v-for="fila in items">
+      <template v-for="fila in chessboardItems">
         <Box
           v-for="column in fila"
           :key="'column-' + column.left + '-' + column.top"
@@ -56,7 +56,6 @@ export default {
   },
   created() {
     this.items = [...this.getChessboard()]
-    console.log(this.items)
   },
   methods: {
     ...mapActions('chessboard', ['setCssClass', 'setPosiblesMoves', 'setMove'])

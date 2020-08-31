@@ -4,6 +4,7 @@ export const SETPIECES = 'setPieces'
 export const SETPOSIBLESMOVES = 'setPosiblesMoves'
 export const SETPIECEMOVED = 'setPieceMove'
 export const SETMOVE = 'setMove'
+export const SETDIRECTMOVE = 'setDirectMove'
 
 export const state = () => ({
   chessboard: [],
@@ -52,22 +53,28 @@ export const actions = {
     let finalChessboard = []
     let direction = -1
     const cssClass = 'notSelected'
-    console.log('PAWN StATE', rootGetters['pawn/getState']())
     chessboard.forEach((x, ix) => {
       finalChessboard[ix] = []
       const left = initialLeft + ix * widthPiece
       x.forEach((y, iy) => {
         const top = initialTop - iy * heightPiece
-        const pieces = [...getters.getPieces()]
+        const pieces = getters.getPieces()
+
         if (iy < 2) {
           direction = 1
         } else {
           direction = -1
         }
-        const piece = pieces.filter((p) => p.id === y.piece)
-        if (piece.length > 0) {
-          piece[0].direction = direction
-        } else {
+        const piece = []
+        pieces.forEach((p) => {
+          const pieceCopy = { ...p }
+          if (pieceCopy.id === y.piece) {
+            pieceCopy.direction = direction
+            piece.push({ ...pieceCopy })
+          }
+        })
+        console.log(piece)
+        if (piece.length === 0) {
           piece.push({
             id: 0
           })
@@ -82,6 +89,7 @@ export const actions = {
         }
       })
     })
+    console.log(finalChessboard)
     commit(SETPOSITIONS, [...finalChessboard])
   },
   [SETPOSIBLESMOVES]({ dispatch, rootGetters, getters }) {
@@ -143,6 +151,14 @@ export const actions = {
     } else {
       commit('setStatus', 1, { root: true })
     }
+  },
+  [SETDIRECTMOVE]({ commit }, payload) {
+    commit(SETMOVE, {
+      xini: payload.xini,
+      yini: payload.yini,
+      xfi: payload.xfi,
+      yfi: payload.yfi
+    })
   }
 }
 

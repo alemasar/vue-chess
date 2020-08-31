@@ -1,6 +1,6 @@
 <template>
   <v-app dark class="override">
-    <v-navigation-drawer>
+    <v-navigation-drawer v-model="drawer" app clipped>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
           <v-list-item-action>
@@ -12,11 +12,11 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content>
-      <v-container>
+    <v-main>
+      <v-container fluid>
         <nuxt />
       </v-container>
-    </v-content>
+    </v-main>
     <v-footer fixed>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -48,10 +48,6 @@ export default {
 
 <style lang="scss">
 .v-application--wrap {
-  flex-direction: row;
-  .v-application--wrap {
-    flex-direction: column;
-  }
   .v-card {
     background-color: white !important;
   }
