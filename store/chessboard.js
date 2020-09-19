@@ -180,20 +180,10 @@ export const mutations = {
     state.chessboard = chessboard
   },
   [SETMOVE](state, { xini, yini, xfi, yfi }) {
-    console.log(state.chessboard[xfi][yfi].piece.type)
-    if (state.chessboard[xfi][yfi].piece.id !== 0) {
-      console.log('BEFORE', state.chessboard[xini][yini].piece.player)
-      state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
-      state.chessboard[xini][yini].piece = {}
-      // console.log('xini' + xini + ' yini ' + yini)
-      state.chessboard[xini][yini].piece.id = 0
-      console.log('AFTER', state.chessboard[xfi][yfi].piece.player)
-    } else {
-      state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
-      state.chessboard[xini][yini].piece = {}
-      // console.log('xini' + xini + ' yini ' + yini)
-      state.chessboard[xini][yini].piece.id = 0
-      //console.log('MUTATION SET MOVE', state)
-    }
+    state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
+    state.chessboard[xini][yini].piece = {}
+    // console.log('xini' + xini + ' yini ' + yini)
+    state.chessboard[xini][yini].piece.id = 0
+    //console.log('MUTATION SET MOVE', state)
   }
 }
