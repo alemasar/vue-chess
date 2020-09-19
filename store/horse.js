@@ -41,7 +41,7 @@ export const actions = {
         }
       }
     })
-    console.log('POSIBLES MOVEMENTS:', posiblesMoves)
+    //console.log('POSIBLES MOVEMENTS:', posiblesMoves)
     commit('chessboard/setPosiblesMoves', posiblesMoves, { root: true })
   }
 }

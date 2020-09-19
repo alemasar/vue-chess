@@ -20,7 +20,7 @@ export const getters = {
     return state.pieces
   },
   getPosiblesMoves: (state) => () => {
-    console.log('GET POSIBLES MOVES ', state.posiblesMoves)
+    // console.log('GET POSIBLES MOVES ', state.posiblesMoves)
     return state.posiblesMoves
   }
 }
@@ -73,7 +73,7 @@ export const actions = {
             piece.push({ ...pieceCopy })
           }
         })
-        console.log(piece)
+        // console.log(piece)
         if (piece.length === 0) {
           piece.push({
             id: 0
@@ -89,7 +89,7 @@ export const actions = {
         }
       })
     })
-    console.log(finalChessboard)
+    //console.log(finalChessboard)
     commit(SETPOSITIONS, [...finalChessboard])
   },
   [SETPOSIBLESMOVES]({ dispatch, rootGetters, getters }) {
@@ -97,7 +97,7 @@ export const actions = {
     const y = rootGetters.getYIni()
     const chessboard = [...getters.getChessboard()]
     let movements = []
-    console.log(chessboard[x][y])
+    //console.log(chessboard[x][y])
     dispatch('piece/setDirection', chessboard[x][y].piece.direction, {
       root: true
     })
@@ -108,15 +108,15 @@ export const actions = {
         root: true
       }
     )
-    console.log('GET POSIBLES MOVES ', getters.getPosiblesMoves())
+    //console.log('GET POSIBLES MOVES ', getters.getPosiblesMoves())
     movements = getters.getPosiblesMoves()
     movements.forEach((mov) => {
       dispatch(SETCSSCLASS, { x: mov[0], y: mov[1], cssClass: 'posibleMove' })
     })
     //commit(SETPOSIBLEMOVES)
   },
-  [SETMOVE]({ dispatch, commit, getters, rootGetters }, payload) {
-    console.log(payload)
+  [SETMOVE]({ dispatch, commit, getters, rootGetters }) {
+    //console.log(payload)
     const xini = rootGetters.getXIni()
     const yini = rootGetters.getYIni()
     const xfi = rootGetters.getXFi()
@@ -142,7 +142,7 @@ export const actions = {
       })
       dispatch(SETCSSCLASS, { x: xini, y: yini, cssClass: 'notSelected' })
       if (chessboard[xfi][yfi].piece.id === 1) {
-        console.log('CHESSBOARD PAWN: ', chessboard[xfi][yfi].piece)
+        // console.log('CHESSBOARD PAWN: ', chessboard[xfi][yfi].piece)
         //        chessboard[xfi][yfi].piece.moved = true
         commit(SETPIECEMOVED, { x: xfi, y: yfi, moved: true })
       }
@@ -171,7 +171,7 @@ export const mutations = {
   },
   [SETPOSIBLESMOVES](state, posiblesMoves) {
     state.posiblesMoves = [...posiblesMoves]
-    console.log('setPosiblesMoves ', state.posiblesMoves)
+    //console.log('setPosiblesMoves ', state.posiblesMoves)
   },
   [SETPIECES](state, pieces) {
     state.pieces = pieces
@@ -180,11 +180,20 @@ export const mutations = {
     state.chessboard = chessboard
   },
   [SETMOVE](state, { xini, yini, xfi, yfi }) {
-    console.log('xfi' + xfi + ' yfi ' + yfi)
-    state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
-    state.chessboard[xini][yini].piece = {}
-    console.log('xini' + xini + ' yini ' + yini)
-    state.chessboard[xini][yini].piece.id = 0
-    console.log('MUTATION SET MOVE', state)
+    console.log(state.chessboard[xfi][yfi].piece.type)
+    if (state.chessboard[xfi][yfi].piece.id !== 0) {
+      console.log('BEFORE', state.chessboard[xini][yini].piece.player)
+      state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
+      state.chessboard[xini][yini].piece = {}
+      // console.log('xini' + xini + ' yini ' + yini)
+      state.chessboard[xini][yini].piece.id = 0
+      console.log('AFTER', state.chessboard[xfi][yfi].piece.player)
+    } else {
+      state.chessboard[xfi][yfi].piece = state.chessboard[xini][yini].piece
+      state.chessboard[xini][yini].piece = {}
+      // console.log('xini' + xini + ' yini ' + yini)
+      state.chessboard[xini][yini].piece.id = 0
+      //console.log('MUTATION SET MOVE', state)
+    }
   }
 }

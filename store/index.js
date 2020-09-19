@@ -34,19 +34,19 @@ export const getters = {
     return state.yfi
   },
   getPlayer: (state) => () => {
-    console.log(state.player)
+    //console.log(state.player)
     return state.player
   }
 }
 
 export const actions = {
   nuxtServerInit({ dispatch }) {
-    console.log(' PASO AL INICI')
+    //console.log(' PASO AL INICI')
     dispatch('chessboard/setPieces')
     dispatch('chessboard/setPositions')
   },
   [SETSTATUS]({ commit }, status) {
-    console.log(status)
+    //console.log(status)
     commit(SETSTATUS, status)
   },
   [SETXINI]({ commit }, x) {
@@ -62,7 +62,7 @@ export const actions = {
     commit(SETYFI, y)
   },
   [SETPLAYER]({ commit }, player) {
-    console.log(player)
+    //console.log(player)
     commit(SETPLAYER, player)
   }
 }

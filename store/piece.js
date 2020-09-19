@@ -48,12 +48,12 @@ export const actions = {
     const posiblesMoves = []
     const direction = rootGetters['piece/getDirection']()
     const type = getters.getType()
-    console.log(type)
+    //console.log(type)
     const moves = [...rootGetters[type + '/getMoves']()]
     const chessboard = [...rootGetters['chessboard/getChessboard']()]
-    console.log('PIECE POSIBLEMOVES: ', moves)
-    console.log('PIECE POSIBLEMOVES: ', direction)
-    console.log('PIECE POSIBLEMOVES: ', chessboard)
+    //console.log('PIECE POSIBLEMOVES: ', moves)
+    //console.log('PIECE POSIBLEMOVES: ', direction)
+    //console.log('PIECE POSIBLEMOVES: ', chessboard)
 
     moves.forEach((m) => {
       let xto = chessboardProps.x + m[0] * direction
@@ -74,7 +74,7 @@ export const actions = {
         posiblesMoves.push([xto, yto])
       }
     })
-    console.log('POSIBLES MOVEMENTS:', posiblesMoves)
+    //console.log('POSIBLES MOVEMENTS:', posiblesMoves)
     commit('chessboard/setPosiblesMoves', posiblesMoves, { root: true })
     //commit(SETID, id)
   }

@@ -29,9 +29,9 @@ export const actions = {
     let xto = x + moves[0][0] * direction
     let yto = y + moves[0][1] * direction
     const moved = chessboard[x][y].piece.moved
-    console.log('MOVED ', moved)
+    //console.log('MOVED ', moved)
     if (this.notOutOfBounds(xto, yto) && chessboard[xto][yto].piece.id === 0) {
-      console.log('PAWN POSIBLEMOVES: ', xto, yto)
+      //console.log('PAWN POSIBLEMOVES: ', xto, yto)
       posiblesMoves.push([xto, yto])
     }
 

@@ -49,11 +49,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getStatus', 'getPlayer'])
+    ...mapGetters(['getStatus', 'getPlayer', 'getXIni', 'getYIni'])
   },
   watch: {
-    type(newType) {
-      console.log('WATCH TYPE: ', newType)
+    type() {
+      // console.log('WATCH TYPE: ', newType)
       this.setPiece()
     }
   },
@@ -62,22 +62,36 @@ export default {
   },
   methods: {
     ...mapActions(['setStatus', 'setXIni', 'setYIni', 'setXFi', 'setYFi']),
+
     clickBox: function () {
       const status = this.getStatus()
       const player = this.getPlayer()
       if (this.type !== 0) {
-        console.log('player: ', player)
+        //console.log('status: ', status)
         if (status === 0 && player === this.direction) {
           this.setStatus(1)
           this.setXIni(this.x)
           this.setYIni(this.y)
+        } else if (status === 1) {
+          /*console.log(
+            this.getXIni() +
+              ' !==' +
+              this.x +
+              ' && ' +
+              this.getYIni() +
+              ' !== ' +
+              this.y
+          )*/
+          if (this.getXIni() === this.x && this.getYIni() === this.y) {
+            this.setStatus(3)
+          }
         }
       } else {
         if (status === 1) {
-          this.setStatus(2)
-          console.log('x:' + this.x + ' y: ' + this.y)
+          // console.log('x:' + this.x + ' y: ' + this.y)
           this.setXFi(this.x)
           this.setYFi(this.y)
+          this.setStatus(2)
         }
       }
     },
@@ -90,6 +104,8 @@ export default {
         this.component = piece
         if (this.direction === -1) {
           this.color = 'negre'
+        } else if (this.direction === 1) {
+          this.color = 'blanc'
         }
       } else {
         this.component = null

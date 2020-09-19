@@ -34,6 +34,7 @@ export default {
   computed: {
     ...mapGetters('chessboard', ['getChessboard']),
     ...mapGetters(['getXIni', 'getYIni', 'getStatus', 'getPlayer']),
+
     status() {
       return this.getStatus()
     },
@@ -43,7 +44,7 @@ export default {
   },
   watch: {
     status(newStatus) {
-      console.log(newStatus)
+      // console.log(newStatus)
       if (newStatus === 1) {
         const x = this.getXIni()
         const y = this.getYIni()
@@ -51,6 +52,11 @@ export default {
         this.setPosiblesMoves()
       } else if (newStatus === 2) {
         this.setMove({})
+      } else if (newStatus === 3) {
+        const x = this.getXIni()
+        const y = this.getYIni()
+        this.setCssClass({ x, y, cssClass: 'notSelected' })
+        this.setStatus(0)
       }
     }
   },
@@ -58,7 +64,8 @@ export default {
     this.items = [...this.getChessboard()]
   },
   methods: {
-    ...mapActions('chessboard', ['setCssClass', 'setPosiblesMoves', 'setMove'])
+    ...mapActions('chessboard', ['setCssClass', 'setPosiblesMoves', 'setMove']),
+    ...mapActions(['setStatus'])
   }
 }
 </script>
