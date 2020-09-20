@@ -45,15 +45,19 @@ export default {
   data() {
     return {
       component: null,
-      color: 'blanc'
+      color: ''
     }
   },
   computed: {
     ...mapGetters(['getStatus', 'getPlayer', 'getXIni', 'getYIni'])
   },
   watch: {
-    type() {
-      // console.log('WATCH TYPE: ', newType)
+    type(newType) {
+      console.log('WATCH TYPE: ', newType)
+      this.setPiece()
+    },
+    direction(newDirection) {
+      console.log('WATCH TYPE: ', newDirection)
       this.setPiece()
     }
   },
@@ -87,9 +91,9 @@ export default {
         if (this.getXIni() === this.x && this.getYIni() === this.y) {
           this.setStatus(3)
         } else {
+          this.setStatus(2)
           this.setXFi(this.x)
           this.setYFi(this.y)
-          this.setStatus(2)
         }
       }
     },
@@ -99,12 +103,12 @@ export default {
         const c = await import(`./pieces/${piece}`)
         const comp = c.default
         this.$options.components[piece] = comp
-        this.component = piece
         if (this.direction === -1) {
           this.color = 'negre'
         } else if (this.direction === 1) {
           this.color = 'blanc'
         }
+        this.component = piece
       } else {
         this.component = null
       }

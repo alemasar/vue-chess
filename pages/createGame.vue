@@ -1,20 +1,26 @@
 <template>
   <v-row>
     <v-col v-if="games.length > 0" cols="5">
-      <h2>Llistat de partides</h2>
-      <v-data-table
-        :headers="headers"
-        :items="games"
-        :items-per-page="5"
-        class="elevation-1"
-        @dblclick:row="selectGame"
-      ></v-data-table>
+      <v-tabs>
+        <v-tab> Crear partida </v-tab>
+        <v-tab> Llistat de partides </v-tab>
+        <v-tab-item>
+          <h2>CREAR PARTIDA</h2>
+        </v-tab-item>
+        <v-tab-item>
+          <v-data-table
+            :headers="headers"
+            :items="games"
+            :items-per-page="5"
+            class="elevation-1"
+            @dblclick:row="selectGame"
+          ></v-data-table>
+        </v-tab-item>
+      </v-tabs>
     </v-col>
     <v-spacer cols="1" />
-    <v-col cols="6">
-      <v-card class="d-inline-block mx-auto">
-        <ChessBoard />
-      </v-card>
+    <v-col v-if="showChessBoard" cols="6">
+      <ChessBoard />
     </v-col>
   </v-row>
 </template>
@@ -36,7 +42,8 @@ export default {
         { text: 'Move player', value: 'movePlayer' }
       ],
       games: [],
-      gamesMovements: []
+      gamesMovements: [],
+      showChessBoard: false
     }
   },
   mounted() {
@@ -90,6 +97,7 @@ export default {
     ...mapActions(['setPlayer']),
     selectGame(e, data) {
       //console.log(data.item)
+      this.showChessBoard = true
       this.setPieces()
       this.setPositions()
       this.gamesMovements.forEach((m) => {
@@ -97,19 +105,19 @@ export default {
           //console.log(m.moves)
           if (m.moves.length > 0) {
             m.moves.forEach((movement, index) => {
-              const func = () => {
-                this.setDirectMove({
-                  xini: movement.inix,
-                  yini: movement.iniy,
-                  xfi: movement.fix,
-                  yfi: movement.fiy
-                })
-                if (index === m.moves.length - 1) {
-                  // console.log(movement)
-                  this.setPlayer(movement.player * -1)
-                }
+              //const func = () => {
+              this.setDirectMove({
+                xini: movement.inix,
+                yini: movement.iniy,
+                xfi: movement.fix,
+                yfi: movement.fiy
+              })
+              if (index === m.moves.length - 1) {
+                // console.log(movement)
+                this.setPlayer(movement.player * -1)
               }
-              setTimeout(func, index * 1000)
+              //}
+              //setTimeout(func, index * 1000)
             })
           }
         }
