@@ -66,14 +66,16 @@ export default {
     clickBox: function () {
       const status = this.getStatus()
       const player = this.getPlayer()
-      if (this.type !== 0) {
-        //console.log('status: ', status)
-        if (status === 0 && player === this.direction) {
+
+      //console.log('status: ', status)
+      if (status === 0 && player === this.direction) {
+        if (this.type !== 0) {
           this.setStatus(1)
           this.setXIni(this.x)
           this.setYIni(this.y)
-        } else if (status === 1) {
-          /*console.log(
+        }
+      } else if (status === 1) {
+        /*console.log(
             this.getXIni() +
               ' !==' +
               this.x +
@@ -82,13 +84,9 @@ export default {
               ' !== ' +
               this.y
           )*/
-          if (this.getXIni() === this.x && this.getYIni() === this.y) {
-            this.setStatus(3)
-          }
-        }
-      } else {
-        if (status === 1) {
-          // console.log('x:' + this.x + ' y: ' + this.y)
+        if (this.getXIni() === this.x && this.getYIni() === this.y) {
+          this.setStatus(3)
+        } else {
           this.setXFi(this.x)
           this.setYFi(this.y)
           this.setStatus(2)

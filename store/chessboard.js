@@ -5,6 +5,7 @@ export const SETPOSIBLESMOVES = 'setPosiblesMoves'
 export const SETPIECEMOVED = 'setPieceMove'
 export const SETMOVE = 'setMove'
 export const SETDIRECTMOVE = 'setDirectMove'
+export const DESELECTPIECE = 'deselectPiece'
 
 export const state = () => ({
   chessboard: [],
@@ -159,6 +160,16 @@ export const actions = {
       xfi: payload.xfi,
       yfi: payload.yfi
     })
+  },
+  [DESELECTPIECE]({ dispatch, commit, rootGetters, getters }) {
+    const x = rootGetters.getXIni()
+    const y = rootGetters.getYIni()
+    const movements = getters.getPosiblesMoves()
+    commit(SETCSSCLASS, { x, y, cssClass: 'notSelected' })
+    movements.forEach((mov) => {
+      dispatch(SETCSSCLASS, { x: mov[0], y: mov[1], cssClass: 'notSelected' })
+    })
+    commit('setStatus', 0, { root: true })
   }
 }
 

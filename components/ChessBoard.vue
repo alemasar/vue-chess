@@ -53,10 +53,7 @@ export default {
       } else if (newStatus === 2) {
         this.setMove({})
       } else if (newStatus === 3) {
-        const x = this.getXIni()
-        const y = this.getYIni()
-        this.setCssClass({ x, y, cssClass: 'notSelected' })
-        this.setStatus(0)
+        this.deselectPiece()
       }
     }
   },
@@ -64,8 +61,12 @@ export default {
     this.items = [...this.getChessboard()]
   },
   methods: {
-    ...mapActions('chessboard', ['setCssClass', 'setPosiblesMoves', 'setMove']),
-    ...mapActions(['setStatus'])
+    ...mapActions('chessboard', [
+      'setCssClass',
+      'setPosiblesMoves',
+      'setMove',
+      'deselectPiece'
+    ])
   }
 }
 </script>
