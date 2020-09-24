@@ -8,6 +8,18 @@
           <v-form v-model="valid">
             <v-container>
               <v-row>
+                <v-col cols="12" class="d-flex justify-end">
+                  <v-btn
+                    color="primary"
+                    :disabled="
+                      !disabledName || !disabledColor || disabledCreateGame
+                    "
+                    @click="createGame()"
+                    >Crear partida</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-row>
                 <v-col cols="12">
                   <v-text-field
                     v-model="name"
@@ -31,12 +43,12 @@
                   <v-btn
                     color="primary"
                     :disabled="disabledName || disabledColor"
-                    @click="createGame()"
-                    >Crear partida</v-btn
+                    @click="modifyGame()"
+                    >Modificar informacio de la partida</v-btn
                   >
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row v-if="incompleteGames.legnth > 0">
                 <v-col cols="12">
                   <v-data-table
                     :headers="headersIncompleteGames"
@@ -44,6 +56,17 @@
                     :items-per-page="5"
                     class="elevation-1"
                     @dblclick:row="completeGameInfo"
+                  ></v-data-table>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <v-data-table
+                    :headers="headersIncompleteGames"
+                    :items="getToStartGames"
+                    :items-per-page="5"
+                    class="elevation-1"
+                    @dblclick:row="startGame"
                   ></v-data-table>
                 </v-col>
               </v-row>
@@ -91,6 +114,7 @@ export default {
       ],
       games: [],
       incompleteGames: [],
+      toStartGames: [],
       gamesMovements: [],
       showChessBoard: false,
       valid: false,
@@ -99,12 +123,16 @@ export default {
       color: '1',
       disabledName: true,
       disabledColor: true,
+      disabledCreateGame: false,
       idGame: 0
     }
   },
   computed: {
     getIncompleteGames() {
       return this.incompleteGames
+    },
+    getToStartGames() {
+      return this.toStartGames
     }
   },
   watch: {
@@ -178,6 +206,7 @@ export default {
                 info.wPlayer = ''
                 info.bPlayer = gameInfo[0].username
               }
+              this.incompleteGames.push(info)
             } else if (gameInfo && gameInfo.length === 2) {
               gameInfo.forEach((p) => {
                 if (p.usercolor === '1') {
@@ -186,8 +215,8 @@ export default {
                   info.bPlayer = p.username
                 }
               })
+              this.toStartGames.push(info)
             }
-            this.incompleteGames.push(info)
           }
         })
       })
@@ -196,7 +225,8 @@ export default {
   methods: {
     ...mapActions('chessboard', ['setDirectMove', 'setPieces', 'setPositions']),
     ...mapActions(['setPlayer']),
-    async createGame() {
+    createGame() {},
+    async modifyGame() {
       if (this.valid) {
         const gameData = {
           username: this.name,
@@ -247,31 +277,41 @@ export default {
     },
     selectGame(e, data) {
       //console.log(data.item)
-      this.showChessBoard = true
-      this.setPieces()
-      this.setPositions()
-      this.gamesMovements.forEach((m) => {
-        if (m.id === data.item.id) {
-          //console.log(m.moves)
-          if (m.moves.length > 0) {
-            m.moves.forEach((movement, index) => {
-              //const func = () => {
-              this.setDirectMove({
-                xini: movement.inix,
-                yini: movement.iniy,
-                xfi: movement.fix,
-                yfi: movement.fiy
+      if (!this.showChessBoard) {
+        this.showChessBoard = true
+        this.setPieces()
+        this.setPositions()
+        this.gamesMovements.forEach((m) => {
+          if (m.id === data.item.id) {
+            //console.log(m.moves)
+            if (m.moves.length > 0) {
+              m.moves.forEach((movement, index) => {
+                //const func = () => {
+                this.setDirectMove({
+                  xini: movement.inix,
+                  yini: movement.iniy,
+                  xfi: movement.fix,
+                  yfi: movement.fiy
+                })
+                if (index === m.moves.length - 1) {
+                  // console.log(movement)
+                  this.setPlayer(movement.player * -1)
+                }
+                //}
+                //setTimeout(func, index * 1000)
               })
-              if (index === m.moves.length - 1) {
-                // console.log(movement)
-                this.setPlayer(movement.player * -1)
-              }
-              //}
-              //setTimeout(func, index * 1000)
-            })
+            }
           }
-        }
-      })
+        })
+      }
+    },
+    startGame(e, data) {
+      if (!this.showChessBoard) {
+        console.log(data)
+        this.disabledCreateGame = true
+        this.setPlayer(1)
+        this.showChessBoard = true
+      }
     }
   }
 }
