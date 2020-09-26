@@ -1,54 +1,12 @@
 <template>
   <v-row>
-    <v-col v-if="games.length > 0" cols="5">
+    <v-col cols="5">
       <v-tabs>
         <v-tab> Crear partida </v-tab>
-        <v-tab> Llistat de partides </v-tab>
+        <v-tab v-if="games.length > 0"> Llistat de partides </v-tab>
         <v-tab-item>
-          <v-form v-model="valid">
-            <v-container>
-              <v-row>
-                <v-col cols="12" class="d-flex justify-end">
-                  <v-btn
-                    color="primary"
-                    :disabled="
-                      !disabledName || !disabledColor || disabledCreateGame
-                    "
-                    @click="createGame()"
-                    >Crear partida</v-btn
-                  >
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
-                    label="Player name"
-                    :disabled="disabledName"
-                    required
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-radio-group v-model="color" :disabled="disabledColor">
-                    <v-radio label="Blanques" value="1"></v-radio>
-                    <v-radio label="Negres" value="-1"></v-radio>
-                  </v-radio-group>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" class="d-flex justify-end">
-                  <v-btn
-                    color="primary"
-                    :disabled="disabledName || disabledColor"
-                    @click="modifyGame()"
-                    >Modificar informacio de la partida</v-btn
-                  >
-                </v-col>
-              </v-row>
-              <v-row v-if="incompleteGames.legnth > 0">
+          <CreateGameForm></CreateGameForm>
+          <!--v-row v-if="incompleteGames.legnth > 0">
                 <v-col cols="12">
                   <v-data-table
                     :headers="headersIncompleteGames"
@@ -71,9 +29,9 @@
                 </v-col>
               </v-row>
             </v-container>
-          </v-form>
+          </v-form-->
         </v-tab-item>
-        <v-tab-item>
+        <v-tab-item v-if="games.length > 0">
           <v-data-table
             :headers="headers"
             :items="games"
@@ -92,12 +50,15 @@
 </template>
 
 <script>
-import ChessBoard from '~/components/ChessBoard.vue'
+import ChessBoard from '~/components/chessboard/ChessBoard.vue'
+import CreateGameForm from '~/components/createGame/CreateGameForm.vue'
 import { mapActions } from 'vuex'
 
 export default {
+  name: 'CreateGame',
   components: {
-    ChessBoard
+    ChessBoard,
+    CreateGameForm
   },
   data: function () {
     return {
@@ -117,13 +78,10 @@ export default {
       toStartGames: [],
       gamesMovements: [],
       showChessBoard: false,
-      valid: false,
-      name: '',
-      nameRules: [(v) => !!v || 'Name is required'],
-      color: '1',
       disabledName: true,
       disabledColor: true,
       disabledCreateGame: false,
+      creatingGame: true,
       idGame: 0
     }
   },
@@ -144,7 +102,7 @@ export default {
     }
   },
   mounted() {
-    this.$fireStore
+    /* this.$fireStore
       .collection('game')
       .get()
       .then((querySnapshot) => {
@@ -173,12 +131,6 @@ export default {
               this.gamesMovements[this.gamesMovements.length - 1].moves.length >
               0
             ) {
-              /* console.log(
-              this.gamesMovements[this.gamesMovements.length - 1].moves[
-                this.gamesMovements[this.gamesMovements.length - 1].moves
-                  .length - 1
-              ].player
-            )*/
               movePlayer =
                 this.gamesMovements[this.gamesMovements.length - 1].moves[
                   this.gamesMovements[this.gamesMovements.length - 1].moves
@@ -220,7 +172,7 @@ export default {
           }
         })
       })
-    console.log(this.incompleteGames)
+    console.log(this.incompleteGames)*/
   },
   methods: {
     ...mapActions('chessboard', ['setDirectMove', 'setPieces', 'setPositions']),
@@ -309,7 +261,9 @@ export default {
       if (!this.showChessBoard) {
         console.log(data)
         this.disabledCreateGame = true
+        this.creatingGame = false
         this.setPlayer(1)
+        this.name = data.wPlayer
         this.showChessBoard = true
       }
     }

@@ -100,7 +100,9 @@ export default {
     async setPiece() {
       const piece = this.getType()
       if (piece !== null) {
-        const c = await import(`./pieces/${piece}`)
+        const c = await import(
+          /* webpackChunkName: "pieces"*/ `./pieces/${piece}`
+        )
         const comp = c.default
         this.$options.components[piece] = comp
         if (this.direction === -1) {
