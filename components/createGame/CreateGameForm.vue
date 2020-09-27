@@ -68,7 +68,7 @@ export default {
                   }
                 }
                 if (change.type === 'modified') {
-                  this.setStatus(4)
+                  //this.setStatus(4)
                   console.log('Modified game: ', changes)
                 }
                 if (change.type === 'removed') {
@@ -98,7 +98,18 @@ export default {
         this.setGames(games)
         this.loadComponent('CreateGameTable')
       } else if (value === 3) {
-        console.log('ESPERANDO CONTRINCANTE')
+        console.log('ESTADO 3')
+        this.unsubscribe()
+        this.$fireStore
+          .collection('game')
+          .doc(this.getIdGame())
+          .onSnapshot((doc) => {
+            const data = doc.data()
+            console.log('UNEIXO A PARTIDA', data)
+            if (data.user.length === 2) {
+              this.setStatus(4)
+            }
+          })
         this.overlay = false
       } else if (value === 4) {
         console.log('CONTRINCANTE UNIDO')

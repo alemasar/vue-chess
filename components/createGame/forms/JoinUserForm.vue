@@ -12,10 +12,20 @@
       </v-row>
       <v-row>
         <v-col cols="6">
+          <p>Join as:</p>
+          <v-radio-group v-model="joinAsColor">
+            <v-radio label="Blanques" value="1"></v-radio>
+            <v-radio label="Negres" value="-1"></v-radio>
+          </v-radio-group>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6">
           <v-text-field
             v-model="versusName"
             :rules="nameRules"
             label="Your Player name"
+            :disabled="joinAsColor !== versusColor"
             required
           ></v-text-field>
         </v-col>
@@ -81,12 +91,13 @@ export default {
       joinGameName: '',
       versusName: '',
       joinName: '',
+      joinAsName: '',
       versusColor: '',
       joinColor: '',
+      joinAsColor: '',
       joinActiveColor: '',
       readyGame: false,
-      nameRules: [(v) => !!v || 'Name is required'],
-      gameNameRules: [(v) => !!v || 'Game name is required']
+      nameRules: [(v) => !!v || 'Name is required']
     }
   },
   computed: {
@@ -136,22 +147,36 @@ export default {
         this.joinName = wPlayer
         this.joinColor = '1'
         this.versusColor = '-1'
+        this.joinAsColor = '-1'
       } else if (bPlayer && bPlayer !== '') {
         this.joinName = bPlayer
         this.joinColor = '-1'
         this.versusColor = '1'
+        this.joinAsColor = '1'
       }
     },
     async joinGameButton() {
+      //TODO: no siempre hay que rellenar el jugador
       this.setIdGame(this.joinGameName)
-      if (this.versusColor === '1') {
-        this.setWPlayer(this.versusName)
-      } else {
-        this.setBPlayer(this.versusName)
-      }
       this.setActivePlayer(this.joinActiveColor)
-      this.setStatus(4)
-      await this.setJoinGame(this.versusColor)
+      if (this.joinAsColor === this.versusColor) {
+        if (this.joinValid) {
+          if (this.versusColor === '1') {
+            this.setWPlayer(this.versusName)
+          } else {
+            this.setBPlayer(this.versusName)
+          }
+          await this.setJoinGame(this.versusColor)
+          this.setStatus(3)
+        }
+      } else {
+        if (this.joinColor === '1') {
+          this.setWPlayer(this.joinName)
+        } else {
+          this.setBPlayer(this.joinName)
+        }
+        this.setStatus(3)
+      }
     }
   }
 }

@@ -122,6 +122,7 @@ export const actions = {
     }
     try {
       const status = getters.getStatus()
+      console.log('UPDATE THE GAME')
       await this.$fireStore
         .collection('game')
         .doc(nameGame)
