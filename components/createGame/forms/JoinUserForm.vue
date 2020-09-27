@@ -121,13 +121,12 @@ export default {
       'setActivePlayer'
     ]),
     ...mapActions('game-info', ['setGames']),
+    ...mapActions('game', ['setJoinGame']),
     selectGame() {
-      console.log(this.item)
       let wPlayer = this.item.wPlayer
       let bPlayer = this.item.bPlayer
       this.joinGameName = this.item.id
       this.joinActiveColor = this.item.activePlayer
-      console.log('HOLA QUE HI HA ALGU')
       if (wPlayer && bPlayer && wPlayer !== '' && bPlayer !== '') {
         this.versusName = wPlayer
         this.versusColor = '1'
@@ -143,15 +142,16 @@ export default {
         this.versusColor = '1'
       }
     },
-    joinGameButton() {
-      /*this.setIdGame(this.gameName)
-      if (this.color === '1') {
-        this.setWPlayer(this.name)
+    async joinGameButton() {
+      this.setIdGame(this.joinGameName)
+      if (this.versusColor === '1') {
+        this.setWPlayer(this.versusName)
       } else {
-        this.setBPlayer(this.name)
+        this.setBPlayer(this.versusName)
       }
-      this.setActivePlayer(this.activeColor)
-      this.setStatus(2)*/
+      this.setActivePlayer(this.joinActiveColor)
+      this.setStatus(4)
+      await this.setJoinGame(this.versusColor)
     }
   }
 }

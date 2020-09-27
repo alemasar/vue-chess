@@ -6,8 +6,10 @@
           <v-text-field
             v-model="gameName"
             :rules="gameNameRules"
+            :error-messages="errors"
             label="Game name"
             required
+            @blur="uniqueGameNameValidation"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -57,10 +59,11 @@ export default {
   data: function () {
     return {
       valid: false,
+      errors: [],
       gameName: '',
       name: '',
-      nameRules: [(v) => !!v || 'Name is required'],
       gameNameRules: [(v) => !!v || 'Game name is required'],
+      nameRules: [(v) => !!v || 'Name is required'],
       color: '1',
       activeColor: '1'
     }
@@ -71,10 +74,22 @@ export default {
       'setIdGame',
       'setWPlayer',
       'setBPlayer',
-      'setActivePlayer'
+      'setActivePlayer',
+      'setGame'
     ]),
     ...mapActions('game-info', ['setGames']),
-    saveNewGame() {
+    async uniqueGameNameValidation() {
+      const docs = await this.$fireStore
+        .collection('game')
+        .doc(this.gameName)
+        .get()
+      console.log(docs.exists)
+      this.errors.splice(0, this.errors.length)
+      if (docs.exists) {
+        this.errors.push('Game name it must be unique')
+      }
+    },
+    async saveNewGame() {
       this.setIdGame(this.gameName)
       if (this.color === '1') {
         this.setWPlayer(this.name)
@@ -82,7 +97,7 @@ export default {
         this.setBPlayer(this.name)
       }
       this.setActivePlayer(this.activeColor)
-      this.setStatus(2)
+      await this.setGame()
     }
   }
 }

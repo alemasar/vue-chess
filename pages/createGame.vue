@@ -193,7 +193,6 @@ export default {
             })
           this.incompleteGames.forEach((ic, index) => {
             if (ic.id === this.idGame) {
-              console.log(ic)
               if (this.color === '1') {
                 this.incompleteGames[index].wPlayer = this.name
               } else {
@@ -207,7 +206,6 @@ export default {
             .collection('game')
             .doc(docRef.id)
             .set(gameData)
-          console.log(docRef.id)
           console.log(addedGame)
           this.name = ''
           this.color = '1'
@@ -219,7 +217,6 @@ export default {
     completeGameInfo(e, data) {
       this.disabledColor = false
       this.disabledName = false
-      console.log(data)
       this.idGame = data.item.id
       if (data.item.wPlayer) {
         this.color = '-1'

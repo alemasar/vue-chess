@@ -9,7 +9,7 @@ export const GETGAME = 'getGame'
 export const SETADDINGGAME = 'setAddingGame'
 
 export const state = () => ({
-  idGame: 0,
+  idGame: '',
   status: -1,
   wPlayer: '',
   bPlayer: '',
@@ -40,12 +40,10 @@ export const getters = {
 
 export const actions = {
   async [GETGAME]({ commit /*, getters */ }, gameName) {
-    console.log(gameName)
     const game = await this.$fireStore.collection('game').doc(gameName).get()
     if (game.exists) {
       const gameInfo = game.data()
       commit(SETIDGAME, gameName)
-      console.log(game.data())
       commit(SETACTIVEPLAYER, gameInfo.activePlayer)
       if (gameInfo.user.length === 1) {
         if (gameInfo.user[0].usercolor === '1') {
@@ -116,7 +114,7 @@ export const actions = {
     let activePlayer = getters.getActivePlayer()
     let usercolor = '1'
     console.log('NOMBRE PARTIDA', nameGame)
-    commit(SETSTATUS, 4)
+    // commit(SETSTATUS, 4)
     commit(SETADDINGGAME, true)
     if (addColor === '-1') {
       name = getters.getBPlayer()
@@ -141,7 +139,7 @@ export const actions = {
 
     //.add({ name: nameGame })
     commit(SETADDINGGAME, false)
-    this.$fireStore
+    /* this.$fireStore
       .collection('game')
       .doc(nameGame)
       .onSnapshot((doc) => {
@@ -156,7 +154,7 @@ export const actions = {
         })
         commit(SETACTIVEPLAYER, data.activePlayer)
         commit(SETSTATUS, data.status)
-      })
+      })*/
   },
   [SETIDGAME]({ commit }, idGame) {
     commit(SETIDGAME, idGame)

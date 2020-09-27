@@ -52,12 +52,12 @@ export default {
     ...mapGetters(['getStatus', 'getPlayer', 'getXIni', 'getYIni'])
   },
   watch: {
-    type(newType) {
-      console.log('WATCH TYPE: ', newType)
+    type() {
+      // console.log('WATCH TYPE: ', newType)
       this.setPiece()
     },
-    direction(newDirection) {
-      console.log('WATCH TYPE: ', newDirection)
+    direction() {
+      // console.log('WATCH TYPE: ', newDirection)
       this.setPiece()
     }
   },

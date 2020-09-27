@@ -30,7 +30,8 @@ export default {
       formComponent: '',
       overlay: false,
       unsubscribe: {},
-      games: []
+      games: [],
+      initState: true
     }
   },
   computed: {
@@ -51,45 +52,56 @@ export default {
     status: async function (value) {
       console.log('STATUS', value)
       if (value === 0) {
-        console.log('EVENT FIRESTORE')
         this.unsubscribe = this.$fireStore
           .collection('game')
-          .onSnapshot((doc) => {
-            const games = []
-            const changes = doc.docChanges()
-            changes.forEach((c) => {
-              const change = c.doc.data()
-              console.log(change.status)
-              console.log(c.doc.data())
-              if (change.status === 3) {
-                let wPlayer = ''
-                let bPlayer = ''
-                change.user.forEach((u) => {
-                  if (u.usercolor === '1') {
-                    wPlayer = u.name
-                  } else if (u.usercolor === '-1') {
-                    bPlayer = u.name
+          .onSnapshot(async (snapshot) => {
+            if (this.initState) {
+              this.initState = false
+            } else {
+              snapshot.docChanges().forEach((change) => {
+                const changes = change.doc.data()
+                if (change.type === 'added') {
+                  if (change.status === '3') {
+                    console.log('New game id: ', change.doc.id)
+                    console.log('New game: ', change.doc.data())
+                    this.addGame(this.parseUser(change.doc, changes))
                   }
-                })
-                games.push({
-                  id: c.doc.id,
-                  activePlayer: change.activePlayer,
-                  wPlayer,
-                  bPlayer
-                })
-              }
-            })
-            this.setGames(games)
-            console.log(this.getGames())
+                }
+                if (change.type === 'modified') {
+                  this.setStatus(4)
+                  console.log('Modified game: ', changes)
+                }
+                if (change.type === 'removed') {
+                  console.log('Removed game: ', changes)
+                }
+              })
+            }
           })
       } else if (value === 1) {
         console.log('ADDED A NEW GAME WITH A USER')
         this.loadComponent('CreateUserForm')
       } else if (value === 2) {
-        //await this.setGame()
         console.log('ADDED THE VERSUS USER')
+        const docs = await this.$fireStore
+          .collection('game')
+          .where('status', '==', 3)
+          .get()
+        const games = []
+        console.log('AÑADO GAMES TO THE LIST')
+        docs.forEach((doc) => {
+          const changes = doc.data()
+          // changes.forEach((c) => {
+          //console.log(c.doc.data())
+
+          games.push(this.parseUser(doc, changes))
+        })
+        this.setGames(games)
         this.loadComponent('CreateGameTable')
+      } else if (value === 3) {
+        console.log('ESPERANDO CONTRINCANTE')
+        this.overlay = false
       } else if (value === 4) {
+        console.log('CONTRINCANTE UNIDO')
         this.overlay = false
       }
     }
@@ -108,13 +120,29 @@ export default {
       'setJoinGame',
       'getGame'
     ]),
-    ...mapActions('game-info', ['setGames']),
+    ...mapActions('game-info', ['setGames', 'addGame']),
+    parseUser(doc, changes) {
+      let wPlayer = ''
+      let bPlayer = ''
+      changes.user.forEach((u) => {
+        if (u.usercolor === '1') {
+          wPlayer = u.name
+        } else if (u.usercolor === '-1') {
+          bPlayer = u.name
+        }
+      })
+      return {
+        id: doc.id,
+        activePlayer: changes.activePlayer,
+        wPlayer,
+        bPlayer
+      }
+    },
     async loadComponent(filename) {
       const comp = await import(
         /* webpackChunkName: "forms" */ `~/components/createGame/forms/${filename}.vue`
       )
       const cmp = comp.default
-      console.log(cmp)
       this.$options.components[cmp.name] = cmp
       this.formComponent = cmp.name
     },
@@ -159,12 +187,10 @@ export default {
         this.lastItem.select(false)
       }
       item.select(true)
-      console.log(item)
       this.lastItem = item
       await this.getGame(item.item.id)
       this.joinGameName = this.getIdGame()
       playerName = this.getWPlayer()
-      console.log('PLAYER NAME: ', playerName)
       if (playerName === '') {
         userColor = '-1'
         versusUserColor = '1'

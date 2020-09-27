@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-data-table
           :headers="headers"
-          :items="games"
+          :items="gamesList"
           :items-per-page="5"
           class="elevation-1"
           single-select
@@ -40,7 +40,7 @@ export default {
         { text: 'Black pieces', value: 'bPlayer' },
         { text: 'Start color', value: 'activePlayer' }
       ],
-      games: [],
+      //games: [],
       lastItem: {},
       selectedItem: {},
       showForm: false
@@ -53,8 +53,12 @@ export default {
     }
   },
   watch: {
-    gamesList: function (value) {
-      console.log('HE MODIFICADO LA LISTA DE PARTIDAS', value)
+    gamesList: {
+      handler(val) {
+        console.log(val)
+        //this.games = val
+      },
+      deep: true
     }
     /*games: {
       handler(value) {
@@ -64,7 +68,7 @@ export default {
     }*/
   },
   mounted() {
-    this.games = this.getGames()
+    this.games = [...this.getGames()]
   },
   methods: {
     ...mapActions('game', [
@@ -81,7 +85,6 @@ export default {
       }
       item.select(true)
       this.lastItem = item
-      console.log('SELECTED ITEM:', item.item)
       if (item.item.wPlayer === '') {
         this.setBPlayer(item.item.bPlayer)
       } else if (item.item.bPlayer === '') {

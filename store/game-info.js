@@ -1,4 +1,5 @@
 export const SETGAMES = 'setGames'
+export const ADDGAME = 'addGame'
 export const SETLOADINGGAMES = 'setLoadingGames'
 
 export const state = () => ({
@@ -19,12 +20,18 @@ export const actions = {
     commit(SETGAMES, games)
     commit(SETLOADINGGAMES, false)
   },
+  [ADDGAME]({ commit /*, getters*/ }, game) {
+    commit(ADDGAME, game)
+  },
   [SETLOADINGGAMES]({ commit }, loadingGame) {
     commit(SETLOADINGGAMES, loadingGame)
   }
 }
 
 export const mutations = {
+  [ADDGAME](state, game) {
+    state.games.push({ ...game })
+  },
   [SETGAMES](state, games) {
     state.games = [...games]
   },
