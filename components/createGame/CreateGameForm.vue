@@ -52,54 +52,18 @@ export default {
     status: async function (value) {
       console.log('STATUS', value)
       if (value === 0) {
-        this.unsubscribe = this.$fireStore
-          .collection('game')
-          .onSnapshot(async (snapshot) => {
-            if (this.initState) {
-              this.initState = false
-            } else {
-              snapshot.docChanges().forEach((change) => {
-                const changes = change.doc.data()
-                if (change.type === 'added') {
-                  if (change.status === '3') {
-                    console.log('New game id: ', change.doc.id)
-                    console.log('New game: ', change.doc.data())
-                    this.addGame(this.parseUser(change.doc, changes))
-                  }
-                }
-                if (change.type === 'modified') {
-                  //this.setStatus(4)
-                  console.log('Modified game: ', changes)
-                }
-                if (change.type === 'removed') {
-                  console.log('Removed game: ', changes)
-                }
-              })
-            }
-          })
+        console.log(value)
+        this.setGamesEvent()
       } else if (value === 1) {
         console.log('ADDED A NEW GAME WITH A USER')
         this.loadComponent('CreateUserForm')
       } else if (value === 2) {
         console.log('ADDED THE VERSUS USER')
-        const docs = await this.$fireStore
-          .collection('game')
-          .where('status', '==', 3)
-          .get()
-        const games = []
-        console.log('AÑADO GAMES TO THE LIST')
-        docs.forEach((doc) => {
-          const changes = doc.data()
-          // changes.forEach((c) => {
-          //console.log(c.doc.data())
-
-          games.push(this.parseUser(doc, changes))
-        })
-        this.setGames(games)
+        await this.setGames()
         this.loadComponent('CreateGameTable')
       } else if (value === 3) {
         console.log('ESTADO 3')
-        this.unsubscribe()
+        this.unsubscribeGamesEvent()
         this.$fireStore
           .collection('game')
           .doc(this.getIdGame())
@@ -131,24 +95,11 @@ export default {
       'setJoinGame',
       'getGame'
     ]),
-    ...mapActions('game-info', ['setGames', 'addGame']),
-    parseUser(doc, changes) {
-      let wPlayer = ''
-      let bPlayer = ''
-      changes.user.forEach((u) => {
-        if (u.usercolor === '1') {
-          wPlayer = u.name
-        } else if (u.usercolor === '-1') {
-          bPlayer = u.name
-        }
-      })
-      return {
-        id: doc.id,
-        activePlayer: changes.activePlayer,
-        wPlayer,
-        bPlayer
-      }
-    },
+    ...mapActions('game-firestore', [
+      'setGamesEvent',
+      'setGames',
+      'unsubscribeGamesEvent'
+    ]),
     async loadComponent(filename) {
       const comp = await import(
         /* webpackChunkName: "forms" */ `~/components/createGame/forms/${filename}.vue`

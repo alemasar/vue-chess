@@ -21,6 +21,7 @@ export const actions = {
     commit(SETLOADINGGAMES, false)
   },
   [ADDGAME]({ commit /*, getters*/ }, game) {
+    console.log('ADDING GAME ', game)
     commit(ADDGAME, game)
   },
   [SETLOADINGGAMES]({ commit }, loadingGame) {

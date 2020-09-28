@@ -52,7 +52,7 @@
 <script>
 import ChessBoard from '~/components/chessboard/ChessBoard.vue'
 import CreateGameForm from '~/components/createGame/CreateGameForm.vue'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'CreateGame',
@@ -86,6 +86,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('game', ['getStatus']),
+    status() {
+      return this.getStatus()
+    },
     getIncompleteGames() {
       return this.incompleteGames
     },
@@ -94,6 +98,9 @@ export default {
     }
   },
   watch: {
+    status: async function (value) {
+      console.log(value)
+    },
     incompleteGames: {
       handler(val) {
         console.log(val)
@@ -177,8 +184,8 @@ export default {
   methods: {
     ...mapActions('chessboard', ['setDirectMove', 'setPieces', 'setPositions']),
     ...mapActions(['setPlayer']),
-    createGame() {},
-    async modifyGame() {
+    ...mapActions('game', ['setStatus'])
+    /*    async modifyGame() {
       if (this.valid) {
         const gameData = {
           username: this.name,
@@ -263,7 +270,7 @@ export default {
         this.name = data.wPlayer
         this.showChessBoard = true
       }
-    }
+    }*/
   }
 }
 </script>
